@@ -59,7 +59,8 @@ def initialize_client(opensearch_url: str) -> OpenSearch:
 
     # 2. Try to get credentials (boto3 session)
     try:
-        session = boto3.Session()
+        aws_profile = os.getenv("AWS_PROFILE")
+        session = boto3.Session(profile_name=aws_profile) if aws_profile else boto3.Session()
         credentials = session.get_credentials()
         aws_region = session.region_name or os.getenv("AWS_REGION")
         if not aws_region:
